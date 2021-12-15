@@ -29,3 +29,8 @@ tcp dport { 80,443 } ct state new counter accept
         counter
     }
 ```
+
+#4.3.5 external.conf
+```bash
+ ip daddr eti.pg.edu.pl tcp dport { 80,443 } counter reject 
+```
