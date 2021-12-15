@@ -50,7 +50,7 @@ table inet firewall {
 		ip saddr 192.168.56.0/24 icmp type echo-request counter accept
 		
 		#counts and drops any traffic not covered by an earlier rule
-		counter drop;
+		counter drop
 	}
 	
 }
