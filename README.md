@@ -21,3 +21,11 @@ ip saddr 192.168.56.0/24 icmp type echo-request counter accept
 ```bash
 tcp dport { 80,443 } ct state new counter accept 
 ```
+
+#4.3.4 output.conf
+```
+    chain outgoing {
+        type filter hook output priority 0; policy accept;
+        counter
+    }
+```
