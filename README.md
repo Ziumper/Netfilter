@@ -2,7 +2,7 @@
 Nftables learning
 
 
-#4.3.1 
+#4.3.1 - counter.conf
 ```bash
 #!/usr/sbin/nft -f 
 
@@ -27,7 +27,7 @@ table inet firewall {
 }
 ```
 
-#4.3.2
+#4.3.2 icmp.conf
 ```bash
 #!/usr/sbin/nft -f 
 
