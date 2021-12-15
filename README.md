@@ -4,27 +4,11 @@ Nftables learning
 
 #4.3.1 - counter.conf
 ```bash
-#!/usr/sbin/nft -f 
+#counter for incoming
+counter
 
-flush ruleset
-
-table inet firewall {
-    chain incoming {
-        type filter hook input priority 0; policy drop;
-        
-        #counter for incoming
-        counter
-        
-        ct state established,related counter accept
-        ct state invalid counter accept
-        tcp dport ssh counter accept 
-        icmpv6 type { nd-neighbor-solicit, nd-router-advert } counter accept
-        iif lo counter accept
-        
-        #counts and drops any traffic not covered by an earlier rule
-        counter drop
-    }
-}
+#counts and drops any traffic not covered by an earlier rule
+counter drop
 ```
 
 #4.3.2 icmp.conf
