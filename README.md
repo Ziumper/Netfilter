@@ -34,3 +34,15 @@ tcp dport { 80,443 } ct state new counter accept
 ```bash
  ip daddr eti.pg.edu.pl tcp dport { 80,443 } counter reject 
 ```
+
+#5.1.1 nat.conf
+```bash
+ chain postrouting {
+        type nat hook postrouting priority 100; 
+        #172.17.0.0/24 - network of docker machine 
+        #enp0s3 - internet interface
+        #10.0.2.15 - ip of computer that have connection to internet
+        ip saddr 172.17.0.0/24 oif enp0s3 snat 10.0.2.15
+        
+    }
+```
