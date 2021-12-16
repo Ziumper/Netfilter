@@ -51,3 +51,29 @@ tcp dport { 80,443 } ct state new counter accept
  #12 - group #enp0s3 - existing interface of internet, ~ eth0
 ip6 saddr FD00:12::/64 oif enp0s3 snat 2001:4070:11:204::11:12
 ```
+
+#5.2.1
+```bash
+  chain forwarding {
+        type filter hook forward priority 0; policy drop;
+  }
+```
+
+#5.2.2 
+```bash
+    chain incoming {
+        type nat hook input priority 0; policy drop
+        icmpv6 type { nd-neighbor-solicit, nd-router-advert } counter accept
+    }
+
+   chain forwarding {
+        type filter hook forward priority 0; policy drop;
+         
+        ct state { established,related } accept
+        #1172.17.0 docker group
+        ip saddr 172.17.0.0/24 accept
+
+        #12 - group
+        ip6 saddr FD00:12::/64 accept
+    }
+```
