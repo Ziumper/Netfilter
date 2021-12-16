@@ -42,7 +42,12 @@ tcp dport { 80,443 } ct state new counter accept
         #172.17.0.0/24 - network of docker machine 
         #enp0s3 - internet interface
         #10.0.2.15 - ip of computer that have connection to internet
-        ip saddr 172.17.0.0/24 oif enp0s3 snat 10.0.2.15
-        
+        ip saddr 172.17.0.0/24 oif enp0s3 snat 10.0.2.15 
     }
+```
+
+#5.1.2 Ipv6 nat.conf
+```bash
+ #12 - group #enp0s3 - existing interface of internet, ~ eth0
+ip6 saddr FD00:12::/64 oif enp0s3 snat 2001:4070:11:204::11:12
 ```
