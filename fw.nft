@@ -50,7 +50,7 @@ table inet firewall {
                 #5.2.2
                 ct state { established,related } counter accept
                 ip saddr 192.168.14.0/24 counter accept
-                ip6 saddr FD00:12::/64 accept
+                ip6 saddr FD00:14::/64 accept
 
                 #5.2.3
                 ct state new tcp dport ssh counter accept
