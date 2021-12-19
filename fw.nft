@@ -1,0 +1,75 @@
+#!/usr/sbin/nft -f
+#s191259 Tomasz Komoszeski
+
+flush ruleset
+
+table inet firewall {
+        chain incoming {
+                type filter hook input priority 0; policy drop;
+                #4.3.1
+                counter
+                ct state established,related counter accept
+                ct state invalid counter drop
+                tcp dport ssh counter accept
+                #4.3.3
+                tcp dport { 80,443 } ct state new counter accept
+                icmpv6 type { nd-neighbor-solicit,nd-router-advert } counter accept
+                #4.3.2
+                ip saddr 192.168.14.0/24 icmp type echo-request counter accept
+                ip6 saddr FD00:14::/64 icmpv6 type echo-request counter accept
+
+
+                iif lo counter accept
+                counter
+        }
+
+        #4.3.4
+        chain outgoing {
+                type filter hook output priority 0; policy accept;
+                counter
+
+                #4.3.5 wp.pl
+                ip daddr 212.77.98.9 tcp dport { 80,443 } counter reject
+        }
+
+        #5.1.1
+        chain postrouting {
+                type nat hook postrouting priority 100;
+                ip saddr 192.168.14.0/24 oif eth0 counter snat 10.1.11.14
+
+        }
+
+
+        #5.2.1
+        chain forwarding {
+                type filter hook forward priority 0; policy drop;
+
+                #5.2.4 pg.edu.pl
+                ip daddr 153.19.40.177 tcp dport { 80,443 } counter reject
+
+                #5.2.2
+                ct state { established,related } counter accept
+                ip saddr 192.168.14.0/24 counter accept
+                ip6 saddr FD00:12::/64 accept
+
+                #5.2.3
+                ct state new tcp dport ssh counter accept
+        }
+
+	#5.3
+        chain prerouting {
+                type nat hook prerouting priority -100
+                ip daddr 10.1.11.14 tcp dport 2022 dnat to 192.168.14.2:22
+        }
+}
+
+#5.1.2
+table ip6 prefix_translation {
+        chain postrouting {
+                type nat hook postrouting priority 100;
+                ip6 saddr FD00:14::/64 oif eth0 counter masquerade
+        }
+}
+
+
+
